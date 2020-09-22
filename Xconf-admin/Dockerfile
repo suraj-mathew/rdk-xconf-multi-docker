@@ -53,6 +53,12 @@ RUN cd /opt/xconfserver/xconf-angular-admin/src/main/webapp && \
 RUN cd /opt/xconfserver/xconf-angular-admin/src/main/webapp && \
     grunt install
 
+# Workaround to overcome the issue with Apache Commons Validator version 1.4.1.
+# This version doesnt support some domain names like ".cloud".
+# The latest version supports it, but its not upgraded in RDK central code as on Sep-2020 (informed & they will take via dev process)
+# So, doing this workaround in docker script
+RUN sed -i "s/<commons-validator.version>1.4.1</<commons-validator.version>1.7</g" /opt/xconfserver/pom.xml
+
 #build xconf
 RUN cd /opt/xconfserver && \
     mvn clean install
