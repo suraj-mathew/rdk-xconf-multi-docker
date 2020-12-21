@@ -1,6 +1,9 @@
 # rdk-xconf-multi-docker
 The multiple dockerization of cassandra db, rdk xconf admin &amp; rdk xconf data service applications
 
+###### Tested docker versions
+ - Docker version 19.03.6, build 369ce74a3c
+ - docker-compose version 1.23.2, build 1110ad01
 
 ###### How to generate the docker images
 
