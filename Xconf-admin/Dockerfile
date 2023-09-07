@@ -36,6 +36,9 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 RUN cd /opt \
     && git clone "https://code.rdkcentral.com/r/rdk/components/generic/xconfserver" 
 
+#Remove the dependency as its failing
+RUN sed -ir 's/"angular-file-saver": "~1.0.0",//g' /opt/xconfserver/xconf-angular-admin/src/main/webapp/bower.json
+
 #xconf- admin service
 RUN echo 'autoGenerateSchema=true' > /opt/xconfserver/xconf-angular-admin/src/main/resources/service.properties 
 RUN cd /opt/xconfserver/xconf-angular-admin/src/main/webapp && \
