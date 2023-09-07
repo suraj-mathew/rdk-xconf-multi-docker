@@ -31,25 +31,29 @@ RUN echo '{ "allow_root": true }' > /root/.bowerrc
 
 #Cassandra
 RUN cd /opt && \
-    wget -c https://archive.apache.org/dist/cassandra/2.0.17/apache-cassandra-2.0.17-bin.tar.gz && \
-    gzip -d apache-cassandra-2.0.17-bin.tar.gz && \
-    tar -xvf  apache-cassandra-2.0.17-bin.tar
+    wget -c https://archive.apache.org/dist/cassandra/3.11.13/apache-cassandra-3.11.13-bin.tar.gz && \
+    gzip -d apache-cassandra-3.11.13-bin.tar.gz && \
+    tar -xvf  apache-cassandra-3.11.13-bin.tar
 
-RUN sed -ri 's/-Xss256k/-Xss512k/g' /opt/apache-cassandra-2.0.17/conf/cassandra.yaml
+RUN sed -ri 's/-Xss256k/-Xss512k/g' /opt/apache-cassandra-3.11.13/conf/cassandra.yaml
+RUN echo 'JVM_OPTS="$JVM_OPTS -Dcom.sun.jndi.rmiURLParsing=legacy"' >> /opt/apache-cassandra-3.11.13/conf/cassandra-env.sh
 
-RUN cd /opt/apache-cassandra-2.0.17/bin \
-    && nohup sh cassandra & > /opt/apache-cassandra-2.0.17/bin/nohup.out \
+RUN cd /opt/apache-cassandra-3.11.13/bin \
+    && nohup sh cassandra -R & > /opt/apache-cassandra-3.11.13/bin/nohup.out \
     && sleep 30 \
     && ps -aux | grep cassandra \
     && sleep 5 \
-    && sh /opt/apache-cassandra-2.0.17/bin/nodetool status \
-    && cd /opt/apache-cassandra-2.0.17/bin \
+    && sh /opt/apache-cassandra-3.11.13/bin/nodetool status \
+    && cd /opt/apache-cassandra-3.11.13/bin \
     && echo "CREATE KEYSPACE \"ApplicationsDiscoveryDataService\" WITH replication = {'class': 'SimpleStrategy','replication_factor': '3'};" | sh cqlsh \
     && echo 'USE "ApplicationsDiscoveryDataService";DESCRIBE KEYSPACE;' | sh cqlsh
 
 #Xconf - download repo
 RUN cd /opt \
     && git clone "https://code.rdkcentral.com/r/rdk/components/generic/xconfserver" 
+
+#Remove the dependency as its failing
+RUN sed -ir 's/"angular-file-saver": "~1.0.0",//g' /opt/xconfserver/xconf-angular-admin/src/main/webapp/bower.json
 
 #xconf- admin service
 RUN echo 'autoGenerateSchema=true' > /opt/xconfserver/xconf-angular-admin/src/main/resources/service.properties 
@@ -80,7 +84,7 @@ RUN cd /opt/xconfserver \
 
 #create all start up commands to a single script and give it as entry point
 RUN echo '#!/bin/bash' > /opt/xconf_starter.sh \
-    && echo 'cd /opt/apache-cassandra-2.0.17/bin' >> /opt/xconf_starter.sh \
+    && echo 'cd /opt/apache-cassandra-3.11.13/bin' >> /opt/xconf_starter.sh \
     && echo 'nohup sh cassandra & > /opt/cassandra.out' >> /opt/xconf_starter.sh \
     && echo 'sleep 30' >> /opt/xconf_starter.sh \
     && echo 'ps -aux | grep cassandra' >> /opt/xconf_starter.sh \
@@ -101,5 +105,3 @@ RUN chmod +x /opt/xconf_starter.sh
 EXPOSE 9092 9093
 
 ENTRYPOINT ["/opt/xconf_starter.sh"]
-
-
