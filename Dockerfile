@@ -85,7 +85,7 @@ RUN cd /opt/xconfserver \
 #create all start up commands to a single script and give it as entry point
 RUN echo '#!/bin/bash' > /opt/xconf_starter.sh \
     && echo 'cd /opt/apache-cassandra-3.11.13/bin' >> /opt/xconf_starter.sh \
-    && echo 'nohup sh cassandra & > /opt/cassandra.out' >> /opt/xconf_starter.sh \
+    && echo 'nohup sh cassandra -R & > /opt/cassandra.out' >> /opt/xconf_starter.sh \
     && echo 'sleep 30' >> /opt/xconf_starter.sh \
     && echo 'ps -aux | grep cassandra' >> /opt/xconf_starter.sh \
     && echo 'cd /opt/xconfserver/xconf-angular-admin' >> /opt/xconf_starter.sh \
