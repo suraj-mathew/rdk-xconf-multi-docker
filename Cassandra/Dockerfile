@@ -37,7 +37,7 @@ RUN cd /opt/apache-cassandra-3.11.13/bin \
 RUN echo '#!/bin/bash' > /opt/cassandra_starter.sh \
     && echo 'ipAddress=$(hostname -I);sed -i "s/localhost/$ipAddress/g" /opt/apache-cassandra-3.11.13/conf/cassandra.yaml' >> /opt/cassandra_starter.sh \
     && echo 'cd /opt/apache-cassandra-3.11.13/bin' >> /opt/cassandra_starter.sh \
-    && echo 'nohup sh cassandra & > /opt/cassandra.out' >> /opt/cassandra_starter.sh \
+    && echo 'nohup sh cassandra -R & > /opt/cassandra.out' >> /opt/cassandra_starter.sh \
     && echo 'sleep 5' >> /opt/cassandra_starter.sh \
     && echo 'ps -aux | grep cassandra' >> /opt/cassandra_starter.sh \
     && echo 'sh /opt/apache-cassandra-3.11.13/bin/nodetool status' >> /opt/cassandra_starter.sh \
