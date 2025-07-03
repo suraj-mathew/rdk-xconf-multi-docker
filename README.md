@@ -3,7 +3,7 @@ The multiple dockerization of cassandra db, rdk xconf admin &amp; rdk xconf data
 
 | NOTE |
 | ----- |
-| **The latest xconf server with version v1.3.0+ is available under RDK Central Github repo - https://github.com/rdkcentral/rdk-docker-scripts** |
+| **The latest xconf server is available under RDK Central Github repo - [https://github.com/rdkcentral/rdk-docker-scripts](https://github.com/rdkcentral/rdk-cloud-container-config)** |
 
 ###### Tested docker versions
  - Docker version 19.03.6, build 369ce74a3c
